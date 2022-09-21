@@ -1,20 +1,23 @@
 # rock_paper_scissors
+https://github.com/jrgsf/rock_paper_scissors
 
 ## Thought Process
 
+### Rock, Paper, Scissors logic
 My first thought was to figure out the basic logic of determining a winner. I remembered someone descibing the basic algorithm for rock, paper, scissors a few years back, and remembered that it was premised on having the choices listed sequentially in an array and just comparing the indices and using modulo to determine the relative spacing within the array. (I.e., rock as element 0 beats scissors as element 2, with a difference of 2 indices.)
 
-With that logic ready, I wanted to get input to work with, so I focused on building out the front end to provide successive pages with the following user inputs:
-- username
-- whether one or two players
-- player's choice of "handShape" (which seemed more descriptive than a vague abstraction like "move")
+### Front end
+With that logic ready, I wanted to get input to work with, so I focused on building out a very minimal front end with React to provide successive pages with users first inputting names, then their "hand shape".
 
-Once I was able to get each page to render and communicate its data to the backend, I started working on the backend. 
-I had orginally planned on just making use of flask-sessions to refer to the current user, but this encountered an issue I got stuck trying to resolve. Losing some time before giving up on using sessions, I decided it might be easier to have persistance layer with a database. Mongodb ran into some issues on (older) my personal machine, so I switched tactics again, to sqlalchemy.
-By this point, I was over the alloted time.
+### Database
+I then focused on building out the backend and a database. I started using pymongo would have preferred to use it, but soon realized I've never properly installed mongo on my personal machine-- I've only used it extensively on work computers. After losing some time on this, I went with SQL Alchemy instead (using SQLite.)
 
-## Things I would've done with more time:
+### Back end
+Routes could be defined in a more "REST" style. In moving quickly, I have the logic work sequentially, with the business logic handled here instead of in the front end.
 
-- Backend: 
-- db: it would have been most time-efficient to have simply done without any database, but for the reasons explained above, it seemed necessary. 
+### Multiple players
+Focusing entirely on getting a one player game to work meant that I realized, too late, that my architecture did not allow for maintaining a game session to access state across the app for multiple users. I would have addressed this, rearchituring the app, if I had more time.
+
+### Variable names
+Using "move" or "choice" seemed too vague, so I went with the admittedly awkward "hand shape".
 

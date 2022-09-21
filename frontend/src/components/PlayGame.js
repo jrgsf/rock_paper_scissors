@@ -1,10 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { useLocation } from "wouter";
+import Outcome from "./Outcome"
 
 const PlayGame = (props) => {
   const [handShape, setHandShape] = useState("");
-  const [location, setLocation] = useLocation();
+  const [outcome, setOutcome] = useState("");
+  const [userResults, setUserResults] = useState([]);
 
   const nameInputChangeHandler = (event) => {
     setHandShape(event.target.value);
@@ -19,21 +20,21 @@ const PlayGame = (props) => {
     formData.append("handShape", handShape);
 
     // Post the form, just make sure to set the 'Content-Type' header
-    const res = await axios.post("//localhost:5000/playgame", formData, {
+    const result = await axios.post("//localhost:5000/playgame", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    setLocation("/outcome");
-  };
+    const {outcome, user_results} = await result.data
+    setOutcome(outcome);
+    setUserResults(user_results);
+    console.log({outcome, user_results});
+};
 
+  if (outcome !== "") {
+    return <Outcome outcome={outcome} userResults={userResults}/>
+  }
   return (
-    //   <form onSubmit={formSubmissionHandler}>
-    //     Choosin' num players here
-    //     <div className="form-actions">
-    //       <button>Submit</button>
-    //     </div>
-    //   </form>
     <div className="container">
       <div className="row">
         <div className="col-sm-12">
