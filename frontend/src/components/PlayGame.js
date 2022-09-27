@@ -1,42 +1,32 @@
-import { useState } from "react";
-import axios from "axios";
-import Outcome from "./Outcome"
+import { useEffect } from "react";
+import { useLocation } from "wouter";
 
 const PlayGame = (props) => {
-  const [handShape, setHandShape] = useState("");
-  const [outcome, setOutcome] = useState("");
-  const [userResults, setUserResults] = useState([]);
+  const [, setLocation] = useLocation();
 
-  const nameInputChangeHandler = (event) => {
-    setHandShape(event.target.value);
+  useEffect(() => {
+    props.setHandShape("")
+  }, []);
+
+  const shapeInputChangeHandler = (event) => {
+    props.setHandShape(event.target.value);
   };
 
   const formSubmissionHandler = async (event) => {
-    // PICK ONE OR TWO PLAYERS
-    event.preventDefault();
-    console.log(setHandShape);
+    console.log("WTF IS props.submitOutcome RN???", props.submitOutcome)
+    if (props.submitOutcome === true) {
+      setLocation("/outcome");
+      console.log("SET LOCATION TO /outcome here")
+    } else {
+      setLocation("/playgame2");
+    }
+  };
 
-    let formData = new FormData();
-    formData.append("handShape", handShape);
-
-    // Post the form, just make sure to set the 'Content-Type' header
-    const result = await axios.post("//localhost:5000/playgame", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    const {outcome, user_results} = await result.data
-    setOutcome(outcome);
-    setUserResults(user_results);
-    console.log({outcome, user_results});
-};
-
-  if (outcome !== "") {
-    return <Outcome outcome={outcome} userResults={userResults}/>
-  }
   return (
     <div className="container">
       <div className="row">
+        Choose one, {props.playerName}.<br />
+        Make sure your opponent doesn't see your choice!!!!
         <div className="col-sm-12">
           <form onSubmit={formSubmissionHandler}>
             <div className="radio">
@@ -44,9 +34,9 @@ const PlayGame = (props) => {
                 <input
                   type="radio"
                   name="handShape"
-                  checked={handShape === "rock"}
+                  checked={props.handShape === "rock"}
                   value="rock"
-                  onChange={nameInputChangeHandler}
+                  onChange={shapeInputChangeHandler}
                 />
                 Rock
               </label>
@@ -56,9 +46,9 @@ const PlayGame = (props) => {
                 <input
                   type="radio"
                   name="handShape"
-                  checked={handShape === "paper"}
+                  checked={props.handShape === "paper"}
                   value="paper"
-                  onChange={nameInputChangeHandler}
+                  onChange={shapeInputChangeHandler}
                 />
                 Paper
               </label>
@@ -68,15 +58,15 @@ const PlayGame = (props) => {
                 <input
                   type="radio"
                   name="handShape"
-                  checked={handShape === "scissors"}
+                  checked={props.handShape === "scissors"}
                   value="scissors"
-                  onChange={nameInputChangeHandler}
+                  onChange={shapeInputChangeHandler}
                 />
                 Scissors
               </label>
             </div>
             <div className="form-actions">
-              <button>Submit</button>
+              <button disabled={!props.handShape}>Submit</button>
             </div>
           </form>
         </div>
